@@ -39,23 +39,22 @@
       <option value="{{$produto->id}}" {{(in_array($produto->id, $pedidos)) ? 'selected' : ''}} >{{$produto->produto}}</option>
     @endforeach
     </select>
-  </div>  
-  <div class="col-md-3">
-    <label for="entrega" class="form-label">Entrega</label>
-    <select class="form-select" aria-label="Default select example" id="entrega" name="entrega">
-    <option data-default disabled selected >{{"Selecione Modo de Entrega"}}</option>
-    @foreach ($entrega as $entrega)
-    <option value="{{$entrega}}"{{$pedido->entrega == $entrega ? 'selected' : ''}}>{{$entrega}}</option>
-    @endforeach
-    </select>
-  </div>
-  <div class="col-9">
+  </div> 
+  <div class="col-md-8">
     <label for="observacao" class="form-label">Observação</label>
     <textarea type="text" class="form-control"  id="observacao" name="observacao" >{{$pedido->observacao}}</textarea>
-  </div> 
-  <div class="col-11 ">
   </div>
-  <div class="col-1">
+  <div class="col-md-1 pt-2">
+    <label for="observacao" class="form-label">Desconto</label>
+    <input type="text" class="form-control"  id="desconto" name="desconto" value="{{$pedido->desconto}}">
+  </div>
+  <div class="col-md-3 pt-5">
+    <input class="form-check-input " type="checkbox" id="entrega" name="entrega" value="1">
+  <label for="entrega" class="form-label">Entrega</label>
+  </div> 
+  <div class="col-md-11 ">
+  </div>
+  <div class="col-md-1">
     <button type="submit" class="btn btn-primary">Editar</button>
   </div>
 </form>

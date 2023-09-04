@@ -22,9 +22,15 @@ Route::get('/', function () {
     return redirect()->route('home');
 });
 Route::get('/pedidosdodia', [App\Http\Controllers\HomeController::class, 'pedidosdodia'])->name('pedidosdodia');
-Route::patch('/pedidosdodia/{pedido}','App\Http\Controllers\PedidosController@finalizar')->name('pedidos.finalizar');
+Route::patch('/pedidosdodia/{pedido}',[App\Http\Controllers\PedidosController::class,'finalizar'])->name('pedidos.finalizar');
 Route::resource('/clientes','App\Http\Controllers\ClientesController');
+
 Route::resource('/produtos','App\Http\Controllers\ProdutosController');
 Route::resource('/pedidos','App\Http\Controllers\PedidosController');
-Route::Get('/pedido','App\Http\Controllers\PedidosController@pedido')->name('pedido.pedido');
+Route::get('/pedido','App\Http\Controllers\PedidosController@pedidocalcular')->name('pedido.pedidocalcular');
+Route::get('/pedido/{produtos}/{desconto}',[App\Http\Controllers\PedidosController::class,'pedido'])->name('pedido.pedido');
 
+Route::prefix('/financas')->group(function(){
+Route::resource('/financeiro','App\Http\Controllers\FinanceiroController');
+Route::get('/produtos',[App\Http\Controllers\FinanceiroController::class,'produtos'])->name('financeiro.produtos');
+});

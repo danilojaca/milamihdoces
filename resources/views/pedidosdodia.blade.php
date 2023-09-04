@@ -49,7 +49,7 @@
                     <th scope="row">{{$data}}</th>
                     <td>{{$hoje->cliente->nome}} {{$hoje->cliente->sobrenome}}</td>
                     <td>{{$hoje->produtos}}</td>                    
-                    <td>{{$hoje->entrega}}</td>
+                    <td>{{$hoje->entrega == 1 ? "Entregar" : "Retirar"}}</td>
                     <td>{{$hoje->observacao}}</td>
                     <td style="text-align:center">
                     <form method="post" action="{{route("pedidos.finalizar", ["pedido" => $hoje->id])}}">

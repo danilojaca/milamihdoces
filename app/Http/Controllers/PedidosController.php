@@ -35,31 +35,39 @@ class PedidosController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $produtos = Produtos::whereIn('id', $request->produtos)->pluck('produto')->toArray();
-        $valor = Produtos::whereIn('id', $request->produtos)->pluck('valortotal')->toArray();
-        $custo = Produtos::whereIn('id', $request->produtos)->pluck('valorcusto')->toArray();
+        $products = $request->produtos;
+        $products = explode(",",$request->produtos);
+        
+        $produtos = Produtos::whereIn('id', $products)->pluck('produto')->toArray();
+        $valor = Produtos::whereIn('id', $products)->pluck('valortotal')->toArray();
+        $custo = Produtos::whereIn('id', $products)->pluck('valorcusto')->toArray();
+        $desconto = $request->input('desconto');
         $valor = array_sum($valor);
         $custo = array_sum($custo);
-        $lucro = ($valor - $custo);
-        $produtos = implode(", ",$produtos);
-        //dd($produtos);
-        
+        $lucro = (($valor - $custo)- $desconto);
+        $produtos = implode(",",$produtos);
+
+        $entrega = $request->input('entrega');
+        if ($entrega != 1) {
+
+        $entrega = 0;
+            
+        }
         $pedido = Pedidos::create([
             'data' => $request->input('data'),
             'cliente_id' => $request->input('cliente_id'),
-            'entrega' => $request->input('entrega'),
+            'entrega' => $entrega,
             'valor' => $valor,
             'custo' => $custo,
             'lucro' => $lucro,
+            'desconto' => $desconto,
             'produtos' => $produtos,
             'observacao' => $request->input('observacao'),
             'status' => 0
 
         ]);
-
-        return redirect()->route('pedidos.index')
-                        ->with('sucess','Pedido Cadastrado com Sucesso');
+         
+        return redirect()->route('pedido.pedidocalcular');
     }
 
 
@@ -95,19 +103,26 @@ class PedidosController extends Controller
        $produtos = Produtos::whereIn('id', $request->produtos)->pluck('produto')->toArray();
        $valor = Produtos::whereIn('id', $request->produtos)->pluck('valortotal')->toArray();
        $custo = Produtos::whereIn('id', $request->produtos)->pluck('valorcusto')->toArray();
+       $desconto = $request->input('desconto');
        $valor = array_sum($valor);
        $custo = array_sum($custo);
-       $lucro = ($valor - $custo);
-       $produtos = implode(", ",$produtos);
-       //dd($produtos);
+       $lucro = (($valor - $custo)- $desconto);
+       $produtos = implode(",",$produtos);
+       $entrega = $request->input('entrega');
+        if ($entrega != 1) {
+
+        $entrega = 0;
+            
+        }
        
        $pedido->update([
            'data' => $request->input('data'),
            'cliente_id' => $request->input('cliente_id'),
-           'entrega' => $request->input('entrega'),
+           'entrega' => $entrega,
            'valor' => $valor,
            'custo' => $custo,
            'lucro' => $lucro,
+           'desconto' => $desconto,
            'produtos' => $produtos,
            'observacao' => $request->input('observacao'),
            'status' => 0
@@ -139,19 +154,32 @@ class PedidosController extends Controller
        return redirect()->route('pedidosdodia');
     }
 
-    public function pedido(Request $request)
-    {   $token = $request->input('_token');
+    public function pedidocalcular(Request $request)
+    {   $products = array("","");
+        $token = $request->input('_token')
+        ;
+        if ($request->produtos != "") {
+            $products = $request->produtos;
+        }
+        $desconto = 0;
         $total = 0;
+        
         if (isset($token)) {
+            $desconto = $request->input('desconto') != "" ? $request->input('desconto') : 0 ;
             $produto = $request->produtos;
             $total = Produtos::whereIn('id',$produto)->pluck('valortotal')->toArray();
             $total = array_sum($total);
+            $total = ($total - $desconto);
             $total = number_format($total,2, ".", ",");
         }
         
-        $entrega= array('Entrega','Retirada');
-        $produtos = Produtos::all();
+        
+        $produtos = Produtos::orderBy('produto')->get();
+        return view('pedidos.pedido',compact('produtos','total','products','desconto'));
+    }
+    public function pedido(Request $request,$produtos,$desconto)
+    {  
         $clientes = Clientes::all();
-        return view('pedidos.pedido',compact('clientes','produtos','entrega','total'));
+        return view('pedidos.create',compact('clientes','produtos','desconto'));
     }
 }

@@ -22,9 +22,7 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {   date_default_timezone_set('America/Sao_Paulo');
-
-
+    {  
         // Pedidos com entregas nos proximos 10 dias
         $currentTime = Carbon::now();
         $currentTime = strtotime( $currentTime);
@@ -52,6 +50,7 @@ class HomeController extends Controller
 
         $aniversarioclientes = Clientes::whereBetween('aniversariocliente',[$more10daytomorrow, $more10day])->orwhereBetween('aniversariofilho',[$more10daytomorrow, $more10day])->orderBy('aniversariofilho')->get();
 
+        
         return view('home',compact('pedidos','aniversarioclientes','more10day','more10daytomorrow','pedidoshoje'));
     }
 

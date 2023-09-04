@@ -1,7 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid row pt-5 ">
+<div class="container ">
+    <nav class="navbar navbar-expand-sm bg-light">
+        <div class="container-fluid">               
+            <div class="container navbar-nav justify-content-center  ">
+                <img src="img/milamih.png" width="300" height="100">                
+            </div>
+        </div>
+    </nav>
+</div>
+<div class="container-fluid row pt-1 ">
     <div class="col-sm-7">
         <table class="table table-danger table-bordered border-danger" id="entrega10dias">
             <thead>
@@ -15,10 +24,10 @@
        
     </div>
     <div class="col-sm-5">
-    <table class="table table-bordered border-danger" id="entrega10dias">
+    <table class="table table-secondary table-bordered border-dark" id="entrega10dias">
             <thead>
                 <tr>
-                    <th scope="col" style="text-align: center" colspan="6"><a style="text-decoration: none;color:black;" href="#" onclick="openWinPedidos()">Pedidos</a></th>
+                    <th scope="col" style="text-align: center" colspan="6"><a style="text-decoration: none;color:black;" href="#" onclick="openWinPedidos()">Pedido<i class="bi bi-cart"></i></a></th>
                 </tr>
                 
             </thead>
@@ -52,7 +61,7 @@
                     <th scope="row">{{$data}}</th>
                     <td>{{$pedido->cliente->nome}} {{$pedido->cliente->sobrenome}}</td>
                     <td>{{$pedido->produtos}}</td>                    
-                    <td>{{$pedido->entrega}}</td>
+                    <td>{{$pedido->entrega == 1 ? "Entregar" : "Retirar"}}</td>
                     <td>{{$pedido->observacao}}</td>
                 </tr>
                 @endforeach     
@@ -88,8 +97,8 @@
                 }
                 if(( $aniversario->aniversariofilho >= $more10daytomorrow && $aniversario->aniversariofilho <= $more10day)){
 
-                    $nome = "$aniversario->nomefilho Filho do[a] $aniversario->nome $aniversario->sobrenome";
-                    $data =  $aniversario->aniversariocliente;
+                    $nome = "$aniversario->nomefilho Filho[a] do[a] $aniversario->nome $aniversario->sobrenome";
+                    $data =  $aniversario->aniversariofilho;
                     $data = explode("-",$data);
                     $dia = $data[2];
                     $mes = $data[1]; 
@@ -107,16 +116,19 @@
         </table>
     </div>
 </div>
-
 <script>
+
+let myWindow1;
+let myWindow2;
+
 function openWinPedidosdoDia() {
-  window.open("http://localhost:8000/pedidosdodia", "_blank", "width=800,height=800");
+  myWindow1 = window.open("http://localhost:8000/pedidosdodia", "_blank", "width=800,height=800");
+ 
 }
 
 function openWinPedidos() {
-  window.open("http://localhost:8000/pedido", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=800,height=700");
+  myWindow2 = window.open("http://localhost:8000/pedido", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=800,height=700");
 }
-
 
 
 </script>

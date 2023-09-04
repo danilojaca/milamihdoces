@@ -19,7 +19,8 @@ return new class extends Migration
             $table->decimal('valor',15,2);
             $table->decimal('custo',15,2);
             $table->decimal('lucro',15,2);
-            $table->string('entrega');
+            $table->decimal('desconto',15,2)->nullable();
+            $table->integer('entrega')->nullable();
             $table->string('observacao')->nullable();
             $table->integer('status');
             $table->timestamps();

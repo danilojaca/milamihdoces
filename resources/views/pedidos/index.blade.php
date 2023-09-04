@@ -7,11 +7,6 @@
             <div class="container navbar-nav justify-content-center  ">
                 <h1>{{"Pedidos"}}</h1>
             </div>
-            <ul class="navbar-nav">      
-                <li class="nav-item">
-                    <a class="btn btn-primary" href="{{ route("pedidos.create") }}"><i class="bi bi-plus-lg"></i></a>
-                </li>            
-            </ul>
         </div>
     </nav>
 </div>
@@ -29,8 +24,10 @@
       <th scope="col">Produto</th>
       <th scope="col">Valor</th>
       <th scope="col">Lucro</th>
+      <th scope="col">Desconto</th>
       <th scope="col">Entrega</th>
       <th scope="col">Observação</th>
+      <th scope="col">Status</th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -48,11 +45,20 @@
       <td>{{$pedido->produtos}}</td>
       <td>{{$pedido->valor}}</td>
       <td>{{$pedido->lucro}}</td>
-      <td>{{$pedido->entrega}}</td>
+      <td>{{$pedido->desconto}}</td>
+      <td>{{$pedido->entrega == 1 ? "Entregar" : "Retirar"}}</td>
       <td>{{$pedido->observacao}}</td>
+      <td >{{$pedido->status == 1 ? "Finalizado":"Pendente"}}</td>
       <td> 
+      <div class="btn-group">
             <button class="btn btn-outline-light text-dark" onclick="window.location.href='{{route('pedidos.edit', ['pedido' => $pedido->id])}}';"><i class="bi bi-pencil-square"></i></button>
-       
+
+            <form method="post" action="{{route("pedidos.destroy", ["pedido" => $pedido->id])}}">
+            @method("DELETE")
+            @csrf
+            <button class="btn btn-outline-light text-dark" type="submit"{{$pedido->status == 1 ? "disabled" : ""}}><i class="bi bi-trash"></i></button> 
+            </form>
+      </div> 
       </td>
     </tr>
 @endforeach 

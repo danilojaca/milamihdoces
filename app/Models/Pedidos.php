@@ -16,6 +16,7 @@ class Pedidos extends Model
         'valor',
         'custo',
         'lucro',
+        'desconto',
         'entrega',
         'observacao',
         'status'

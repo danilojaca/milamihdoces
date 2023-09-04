@@ -57,7 +57,7 @@
       @endphp
       <td>{{$datacliente}}</td>
       @php
-      $datafilho =  $cliente->aniversariocliente;
+      $datafilho =  $cliente->aniversariofilho;
                   $datafilho = explode("-",$datafilho);
                   $dia = $datafilho[2];
                   $mes = $datafilho[1]; 
